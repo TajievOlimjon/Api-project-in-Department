@@ -1,0 +1,98 @@
+CREATE TABLE Department
+(
+    Id serial NOT NULL,
+    Name character varying(100) NOT NULL,
+    PRIMARY KEY (id)
+);
+insert into Department(Name)values('Barki Tojik'),('Hukumati Sino'),('Alif'),('D-Sity'),('Spitamen');
+
+	
+CREATE TABLE Employee
+(
+    Id bigserial NOT NULL PRIMARY KEY,
+   
+    FirstName character varying(50)  NOT NULL,
+    LastName character varying(50)  NOT NULL,
+	BirthDate date NOT NULL,
+    Gender varchar(30) NOT NULL,
+    HireDate date NOT NULL
+);
+
+ 	Id
+ 	FullName
+ 	DepartmentId 
+ 	DepartmentName
+
+
+select E.Id,concat(E.FirstName,' ',E.LastName) as FullName,D.Id as DepartmentId,D.Name as DepartmentName
+from Employee E
+join Department_Employee DE on DE.EmployeeId=E.Id 
+join Department as D on D.Id=DE.DepartmentId where E.Id=3
+
+
+insert into Employee(FirstName,LastName,BirthDate,Gender,HireDate)
+			values('Olimjon','Tajiev','2001-12-12','Muhjina','2022-01-01'),
+				   ('Donior','Tajiev','2001-12-12','Muhjina','2022-01-01'),
+				   ('Akramjon','Albekov','2001-12-12','Muhjina','2022-01-01'),
+				   ('Akmaljon','Agamberdiev','2001-12-12','Muhjina','2022-01-01'),
+				   ('Saidmumin','Saidov','2001-12-12','Muhjina','2022-01-01'),
+				   ('Hasan','Savrov','2001-12-12','Muhjina','2022-01-01');
+
+	CREATE TABLE Salary
+(
+	Id bigserial not null PRIMARY KEY,
+    EmployeeId bigint NOT NULL  REFERENCES Employee (Id) ,
+    Amount bigint NOT NULL,
+    FromDate date NOT NULL,
+    ToDate date NOT NULL
+);
+
+insert into Salary(EmployeeId,Amount,FromDate,ToDate)
+		values(1,45000,'2019-12-12','2022-06-06'),
+			   (2,45000,'2019-12-12','2022-06-06'),
+			   (3,45000,'2019-12-12','2022-06-06'),
+			   (4,45000,'2019-12-12','2022-06-06'),
+			   (5,45000,'2019-12-12','2022-06-06'),
+			   (6,45000,'2019-12-12','2022-06-06');
+			   
+			   
+
+
+CREATE TABLE Department_Employee
+(
+    EmployeeId bigint PRIMARY KEY NOT NULL REFERENCES Employee (Id),
+    DepartmentId bigint NOT NULL REFERENCES Department (Id),
+    FromDate date NOT NULL,
+    ToDate date NOT NULL
+);
+insert into Department_Employee(EmployeeId,DepartmentId,FromDate,ToDate)
+					values(1,1,'2019-12-12','2022-06-06'),
+						  (2,2,'2019-12-12','2022-06-06'),
+						  (3,3,'2019-12-12','2022-06-06'),
+						  (4,4,'2019-12-12','2022-06-06'),
+						  (5,5,'2019-12-12','2022-06-06'),
+						  (6,5,'2019-12-12','2022-06-06');
+
+
+
+CREATE TABLE Department_Manager
+(
+    EmployeeId bigint NOT NULL PRIMARY KEY REFERENCES Employee (Id),
+    DepartmentId int NOT NULL REFERENCES Department (Id),
+    FromDate date NOT NULL,
+    ToDate date NOT NULL
+);
+
+insert into Department_Manager(EmployeeId,DepartmentId,FromDate,ToDate)
+						values(1,1,'2019-12-12','2022-06-06'),
+						  (2,2,'2019-12-12','2022-06-06'),
+						  (3,3,'2019-12-12','2022-06-06'),
+						  (4,4,'2019-12-12','2022-06-06'),
+						  (5,5,'2019-12-12','2022-06-06'),
+						  (6,5,'2019-12-12','2022-06-06');
+						  
+	select D.Id,D.Name,Employee.Id as ManagerId , concat(Employee.FirstName,'  ',Employee.LastName) as FullName 	
+	from Department_Manager
+	join Department as D on D.Id=Department_Manager.DepartmentId
+	join Employee on Employee.Id=Department_Manager.EmployeeId
+						  
