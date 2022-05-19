@@ -18,28 +18,28 @@ namespace Services
             return new NpgsqlConnection(connectionString);
         }
 
-        public List<Department_ManagerDM> GetManagers()
+        public async  Task<List<Department_ManagerDM>> GetManagers()
         {
             using (var con =GetConnection())
             {
                 var sql = " select E.Id as ManagerId, concat(E.FirstName,' ',E.LastName) as ManagerFullName , " +
                     " D.Id as DepartmentId, D.Name as DepartmentName, DM.FromDate, DM.ToDate " +
-                    " from Department_Manager DM " +
+                    " from Department_Manager as  DM " +
                     " join Employee as E on E.Id = DM.EmployeeId " +
                     " join Department as D on D.Id = DM.DepartmentId ";
-                var list = con.Query<Department_ManagerDM>(sql);
+                var list =await con.QueryAsync<Department_ManagerDM>(sql);
                 return list.ToList();
             }
         }
 
 
-        public int InsertManager(Department_Manager manager)
+        public async  Task<int> InsertManager(Department_Manager manager)
         {
             using (var con=GetConnection())
             {
                 var sql =$" Insert into Department_Manager(EmployeeId,DepartmentId,FromDate,ToDate) " +
                     $" values({manager.EmployeeId},{manager.DepartmentId},'{manager.FromDate}','{manager.ToDate}') ";
-                var insert = con.Execute(sql);
+                var insert =await con.ExecuteAsync(sql);
                 return insert;
 
             }

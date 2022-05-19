@@ -20,50 +20,52 @@ namespace Services
         }
 
 
-        public List<DepartmentD> GetDepartments()
+        public async  Task<List<DepartmentD>> GetDepartments()
         {
             using (var con =GetConnection())
             {
                 var sql = " select D.Id  , D.Name , E.Id as ManagerId , concat(E.FirstName,'  ',E.LastName) as ManagerFullName " +
                           " from Department D " +
-                          " join Employee as E on E.Id = D.Id  ";
-                         
-                var list = con.Query<DepartmentD>(sql);
+                          " join Department_Employee as DE on DE.DepartmentId=D.Id " +
+                          " join Employee as E on E.Id = DE.EmployeeId ";
+
+                var list =await con.QueryAsync<DepartmentD>(sql);
                 return list.ToList();
             }
         }
 
-        public DepartmentD GetDepartmentById(int Id)
+        public async Task<DepartmentD> GetDepartmentById(int Id)
         {
             using (var con = GetConnection())
             {
                 var sql = $" select D.Id , D.Name , E.Id as ManagerId , concat(E.FirstName,'  ',E.LastName) as ManagerFullName " +
-                             $" from Department D " +
-                             $" join Employee as E on E.Id = D.Id  " +
-                             $" Where D.Id={Id} ";
-                var getById=con.QuerySingle<DepartmentD>(sql);
+                          $" from Department D " +
+                          $" join Department_Employee as DE on DE.DepartmentId=D.Id " +
+                          $" join Employee as E on E.Id = DE.EmployeeId " +
+                          $" Where D.Id={Id} ";
+                var getById= await con.QuerySingleAsync<DepartmentD>(sql);
                 return getById;
 
             }
         }
 
-        public int InsertDepartment(Department department)
+        public async Task<int> InsertDepartment(Department department)
         {
             using (var con=GetConnection())
             {
                 var sql = $" Insert into  Department(Name) values('{department.Name}')  ";
-                var insert = con.Execute(sql);
+                var insert =await con.ExecuteAsync(sql);
 
                 return insert;
             }
         }
-        public int UpdateDepartment(Department department,int Id)
+        public async Task<int> UpdateDepartment(Department department,int Id)
         {
             using (var con = GetConnection())
             {
                 var sql = $" Update Department Set Name='{department.Name}'" +
                     $" Where Id={Id} ";
-                var update = con.Execute(sql);
+                var update =await con.ExecuteAsync(sql);
 
                 return update;
             }

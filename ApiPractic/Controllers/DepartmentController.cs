@@ -15,29 +15,29 @@ namespace ApiPractic.Controllers
         }
 
         [HttpGet("GetDepartments")]
-        public List<DepartmentD> GetDepartments()
+        public async Task<List<DepartmentD>> GetDepartments()
         {
-            return departmentService.GetDepartments();
+            return await departmentService.GetDepartments();
         }
 
         [HttpGet("GetDepartmentById")]
-        public DepartmentD GetDepartmentById(int Id)
-        {
-            return departmentService.GetDepartmentById(Id);
+        public async Task<DepartmentD> GetDepartmentById(int Id)
+        { 
+            return await departmentService.GetDepartmentById(Id);
 
         }
 
         [HttpPost("InsertDepartment")]
 
-        public int InsertDepartment(Department department)
+        public async Task<int> InsertDepartment(Department department)
         {
-            return departmentService.InsertDepartment(department);
+            return await departmentService.InsertDepartment(department);
         }
 
         [HttpPut("UpdateDepartment")]
-        public int UpdateDepartment(Department department, int Id)
+        public async Task<int> UpdateDepartment(Department department, int Id)
         {
-            return departmentService.UpdateDepartment(department,Id);
+            return await departmentService.UpdateDepartment(department,Id);
         }
     }
 }

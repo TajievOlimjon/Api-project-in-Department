@@ -17,28 +17,28 @@ namespace ApiPractic.Controllers
 
 
         [HttpGet("GetEmployees")]
-        public List<EmployeeE> GetEmployees()
+        public async Task<List<EmployeeE>> GetEmployees()
         {
-            return employeeService.GetEmployees();
+            return await employeeService.GetEmployees();
         }
 
         [HttpGet("GetEmployeeById")]
-        public EmployeeE GetEmployeeById(int Id)
+        public async Task<EmployeeE> GetEmployeeById(int Id)
         {
-            return employeeService.GetEmployeeById(Id);
+            return await employeeService.GetEmployeeById(Id);
         }
 
         [HttpPost("InsertEmployee")]
-        public int InsertEmployee(Employee employee)
+        public async Task<int> InsertEmployee(Employee employee)
         {
-            return employeeService.InsertEmployee(employee);
+            return await employeeService.InsertEmployee(employee);
         }
 
 
         [HttpPut("UpdateEmployee")]
-        public int UpdateEmployee(Employee employee, int Id)
+        public async Task<int> UpdateEmployee(Employee employee, int Id)
         { 
-           return employeeService.UpdateEmployee(employee, Id);
+           return await employeeService.UpdateEmployee(employee, Id);
         }
 
 

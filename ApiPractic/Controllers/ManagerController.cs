@@ -17,15 +17,15 @@ namespace ApiPractic.Controllers
         }
 
         [HttpGet("GetManagers")]
-        public List<Department_ManagerDM> GetManagers()
+        public async Task<List<Department_ManagerDM>> GetManagers()
         {
-            return managerService.GetManagers();
+            return await managerService.GetManagers();
         }
 
         [HttpPost("InsertManager")]
-        public int InsertManager(Department_Manager manager)
+        public async Task<int> InsertManager(Department_Manager manager)
         {
-            return managerService.InsertManager(manager);
+            return await managerService.InsertManager(manager);
         }
 
 

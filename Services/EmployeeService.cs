@@ -18,34 +18,36 @@ namespace Services
             return new NpgsqlConnection(connectionString);
         }
 
-        public List<EmployeeE> GetEmployees()
+        public async Task<List<EmployeeE>> GetEmployees()
         {
             using (var con = GetConnection())
             {
                 var sql = " select E.Id, concat(E.FirstName,' ',E.LastName) as FullName, D.Id as DepartmentId, D.Name as DepartmentName " +
                     " from Employee E " +
-                    " join Department as D on D.Id = E.Id ";
-                var list = con.Query<EmployeeE>(sql);
+                    " join Department_Employee as DE on DE.EmployeeId=E.Id " +
+                    " join Department as D on D.Id = DE.DepartmentId ";
+                var list = await con.QueryAsync<EmployeeE>(sql);
                 return list.ToList();
             }
         }
 
-        public EmployeeE GetEmployeeById(int Id)
+        public async Task<EmployeeE> GetEmployeeById(int Id)
         {
             using (var con = GetConnection())
             {
                 var sql = $" select E.Id, concat(E.FirstName,' ',E.LastName) as FullName, D.Id as DepartmentId, D.Name as DepartmentName " +
                     $" from Employee E  " +
-                    $" join Department as D on D.Id = E.Id  " +
+                    $" join Department_Employee as DE on DE.EmployeeId=E.Id " +
+                    $" join Department as D on D.Id = DE.DepartmentId "+
                     $"  Where E.Id={Id} ";
                
-                var getById = con.QuerySingle<EmployeeE>(sql);
+                var getById =await  con.QuerySingleAsync<EmployeeE>(sql);
                 return getById;
 
             }
         }
 
-        public int InsertEmployee(Employee employee)
+        public async Task<int> InsertEmployee(Employee employee)
         {
             using (var con=GetConnection())
             {
@@ -55,13 +57,13 @@ namespace Services
                     $" '{employee.BirthDate}', " +
                     $" '{employee.Gender}', " +
                     $" '{employee.HireDate}') ";
-                var insert = con.Execute(sql);
+                var insert =await con.ExecuteAsync(sql);
                 return insert;
 
             }
         }
 
-        public int UpdateEmployee(Employee employee,int Id)
+        public async Task<int> UpdateEmployee(Employee employee,int Id)
         {
             using (var con=GetConnection())
             {
@@ -73,7 +75,7 @@ namespace Services
                     $" Gender='{employee.Gender}', " +
                     $" HireDate='{employee.HireDate}' " +
                     $" Where Id={Id} ";
-                var update = con.Execute(sql);
+                var update =await con.ExecuteAsync(sql);
                 return update;
             }
         }
